@@ -1,0 +1,37 @@
+{
+  "name": "undefineds",
+  "owner": {
+    "name": "Undefineds",
+    "email": "developer@undefineds.co"
+  },
+  "metadata": {
+    "description": "Shared plugin marketplace for Undefineds tools.",
+    "homepage": "https://github.com/undefinedsco/marketplace"
+  },
+  "plugins": [
+    {
+      "name": "solid-modeling",
+      "version": "0.2.33",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/undefinedsco/models.git",
+        "path": "plugins/solid-modeling",
+        "ref": "v0.2.33"
+      },
+      "description": "Shared Solid/RDF modeling guidance for @undefineds.co/models and Pod-facing products.",
+      "author": {
+        "name": "Undefineds",
+        "email": "developer@undefineds.co"
+      },
+      "keywords": [
+        "solid",
+        "rdf",
+        "pod",
+        "drizzle-solid",
+        "models"
+      ],
+      "category": "development",
+      "homepage": "https://github.com/undefinedsco/models/tree/main/plugins/solid-modeling"
+    }
+  ]
+}
