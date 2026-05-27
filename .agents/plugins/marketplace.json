@@ -24,7 +24,7 @@
         "source": "git-subdir",
         "url": "https://github.com/undefinedsco/xpod.git",
         "path": "plugins/xpod-cli",
-        "ref": "cli"
+        "ref": "v0.3.16"
       },
       "policy": {
         "installation": "AVAILABLE",
