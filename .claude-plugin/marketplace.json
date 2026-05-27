@@ -32,6 +32,30 @@
       ],
       "category": "development",
       "homepage": "https://github.com/undefinedsco/models/tree/main/plugins/solid-modeling"
+    },
+    {
+      "name": "xpod-cli",
+      "version": "0.3.15",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/undefinedsco/xpod.git",
+        "path": "plugins/xpod-cli",
+        "ref": "cli"
+      },
+      "description": "Spec-aligned Xpod CLI guidance for Solid Pod resource operations, server administration, auth, and model-boundary reviews.",
+      "author": {
+        "name": "Undefineds",
+        "email": "developer@undefineds.co"
+      },
+      "keywords": [
+        "xpod",
+        "solid",
+        "pod",
+        "cli",
+        "server"
+      ],
+      "category": "development",
+      "homepage": "https://github.com/undefinedsco/xpod/tree/cli/plugins/xpod-cli"
     }
   ]
 }
