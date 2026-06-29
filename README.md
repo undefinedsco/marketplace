@@ -14,6 +14,8 @@ Codex:
 codex plugin marketplace add undefinedsco/marketplace --ref main
 codex plugin add solid-modeling@undefineds
 codex plugin add xpod-cli@undefineds
+codex plugin add linx-capture@undefineds
+codex plugin add linx-symphony@undefineds
 ```
 
 Claude Code:
@@ -22,6 +24,8 @@ Claude Code:
 claude plugin marketplace add undefinedsco/marketplace
 claude plugin install solid-modeling@undefineds
 claude plugin install xpod-cli@undefineds
+claude plugin install linx-capture@undefineds
+claude plugin install linx-symphony@undefineds
 ```
 
 ## Plugins
@@ -30,3 +34,6 @@ claude plugin install xpod-cli@undefineds
   `github.com/undefinedsco/models/plugins/solid-modeling`.
 - `xpod-cli` - spec-aligned Xpod CLI guidance from
   `github.com/undefinedsco/xpod/plugins/xpod-cli`.
+
+- `linx-capture` - portable Capture skill from this marketplace repository.
+- `linx-symphony` - portable Symphony skill from this marketplace repository.

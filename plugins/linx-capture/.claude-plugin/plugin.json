@@ -1,0 +1,22 @@
+{
+  "name": "linx-capture",
+  "version": "0.3.31",
+  "description": "Portable LinX Capture skill for deciding when durable conversation context should be saved.",
+  "author": {
+    "name": "Undefineds",
+    "email": "developer@undefineds.co"
+  },
+  "homepage": "https://github.com/undefinedsco/marketplace/tree/main/plugins/linx-capture",
+  "repository": "https://github.com/undefinedsco/marketplace",
+  "license": "MIT",
+  "keywords": [
+    "linx",
+    "capture",
+    "memory",
+    "solid",
+    "pod"
+  ],
+  "skills": [
+    "./skills/capture"
+  ]
+}

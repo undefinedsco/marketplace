@@ -56,6 +56,50 @@
       ],
       "category": "development",
       "homepage": "https://github.com/undefinedsco/xpod/tree/v0.3.16/plugins/xpod-cli"
+    },
+    {
+      "name": "linx-capture",
+      "version": "0.3.31",
+      "source": {
+        "source": "local",
+        "path": "./plugins/linx-capture"
+      },
+      "description": "Portable LinX Capture skill for deciding when durable conversation context should be saved.",
+      "author": {
+        "name": "Undefineds",
+        "email": "developer@undefineds.co"
+      },
+      "keywords": [
+        "linx",
+        "capture",
+        "memory",
+        "solid",
+        "pod"
+      ],
+      "category": "development",
+      "homepage": "https://github.com/undefinedsco/marketplace/tree/main/plugins/linx-capture"
+    },
+    {
+      "name": "linx-symphony",
+      "version": "0.3.31",
+      "source": {
+        "source": "local",
+        "path": "./plugins/linx-symphony"
+      },
+      "description": "Portable LinX Symphony skill for system evolution, worker coordination, and Delivery feedback.",
+      "author": {
+        "name": "Undefineds",
+        "email": "developer@undefineds.co"
+      },
+      "keywords": [
+        "linx",
+        "symphony",
+        "solid",
+        "pod",
+        "worker"
+      ],
+      "category": "development",
+      "homepage": "https://github.com/undefinedsco/marketplace/tree/main/plugins/linx-symphony"
     }
   ]
 }

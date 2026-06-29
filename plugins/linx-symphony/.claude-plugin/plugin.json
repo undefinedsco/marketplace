@@ -1,0 +1,22 @@
+{
+  "name": "linx-symphony",
+  "version": "0.3.31",
+  "description": "Portable LinX Symphony skill for system evolution, worker coordination, and Delivery feedback.",
+  "author": {
+    "name": "Undefineds",
+    "email": "developer@undefineds.co"
+  },
+  "homepage": "https://github.com/undefinedsco/marketplace/tree/main/plugins/linx-symphony",
+  "repository": "https://github.com/undefinedsco/marketplace",
+  "license": "MIT",
+  "keywords": [
+    "linx",
+    "symphony",
+    "solid",
+    "pod",
+    "worker"
+  ],
+  "skills": [
+    "./skills/symphony"
+  ]
+}
