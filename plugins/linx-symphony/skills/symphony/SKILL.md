@@ -32,25 +32,27 @@ System Situation
 ## Recording Trigger
 
 Do not wait for the user to say "record" or "summarize." Every conversation
-produces signals—Idea, Design Decision, Research Finding, Meta-Rule,
-Product Direction, or Project Context. The Secretary must decide when
-these signals should become durable control records.
+may produce durable control signals: design conclusions, corrected operating
+rules, research findings with provenance, new candidate work, architecture
+direction, or project context. The Secretary must decide when those signals
+should become durable control records.
 
 Judgment rules:
 
-- A clear design conclusion has been reached ("放弃长链条归因 → 版本记录").
-  → Create or update the relevant control record. Ask for the user only
-    when authority, target, or type classification is ambiguous.
-- The user has corrected the Secretary's behavior ("你应该自己判断什么时候记录").
-  → This is a Meta-Rule. Record it as one.
-- A research finding with external evidence has been cited ("GraphGPO 困于单任务轨迹").
-  → Record it with provenance.
+- A clear design conclusion has been reached.
+  → Create or update the relevant discovered control record. Ask the user only
+    when authority, target, or type selection is ambiguous.
+- The user has corrected Secretary behavior or operating policy.
+  → Capture it as the discovered rule/policy/control type, not as hardcoded
+    prompt text.
+- A research finding with external evidence has been cited.
+  → Record it with provenance through the discovered evidence/report type.
 - A new candidate work item or architectural direction has been identified.
-  → Record it as an Idea first. Promote to Issue only when acceptance, scope,
-    and compatibility impact are clear.
+  → Capture it as the discovered candidate/planning type first. Promote it only
+    when acceptance, scope, and compatibility impact are clear.
 - The user explicitly asks to record ("记录一下").
   → This is the fallback, not the primary trigger. The Secretary should have
-    already proposed recording before the user asks.
+    already considered recording before the user asks.
 
 Do not create a control record for:
 
@@ -58,10 +60,10 @@ Do not create a control record for:
 - Transient task instructions ("帮我查一下").
 - Social chatter or off-topic remarks.
 
-When in doubt, propose: "这个要落到控制记录里吗？" and show the
-classification (Idea / Decision / Finding / Meta-Rule). The user confirms
-or corrects—once. Do not ask again for the same kind of signal in the same
-session unless the user's intent genuinely changed.
+When in doubt, propose: "这个要落到控制记录里吗？" and show the discovered
+target type or the reason a fallback capture/modeling proposal is needed. The
+user confirms or corrects—once. Do not ask again for the same kind of signal in
+the same session unless the user's intent genuinely changed.
 
 ## Runtime Boundary
 
@@ -87,6 +89,21 @@ writer is an AI operating through terminal/tools rather than in-process LinX
 code, `xpod` CLI is the preferred direct Pod tool surface. Use model-backed
 `xpod obj` operations for Symphony resources when available; do not invent a
 parallel Symphony-specific AI tool API and do not hand-patch modeled TTL paths.
+
+Discover the active Symphony resource types and descriptors before writing:
+
+```bash
+xpod obj schemas --domain symphony --json
+xpod obj describe <schema-or-alias> --json
+xpod obj upsert --schema <schema-or-alias> --from - --dry-run --json
+```
+
+When using `--from -`, send JSONL: one JSON object per line. Do not pipe pretty multi-line JSON unless xpod explicitly adds non-JSONL stdin support.
+
+Do not store fixed field definitions, path templates, or predicate lists in this
+skill. Those belong to models, drizzle-solid, and xpod descriptors. Use the
+dry-run result to inspect resource URIs, subject IRIs, linked files, warnings,
+and validation errors before committing.
 
 In LinX Agent Runtime, Pod authority belongs to the runtime session and should
 be inherited by tools launched inside that session. If a Secretary or worker has
@@ -267,8 +284,9 @@ Every mutable state field needs a primary writer:
 Resource boundaries:
 
 - Message is an immutable utterance or event, not automatically an Issue.
-- Idea is a lightweight candidate extracted from one or more Messages. It is
-  not a requirement, decision, Issue, or Task until promoted.
+- A discovered candidate/capture resource is a lightweight candidate extracted
+  from one or more Messages. It is not a requirement, decision, Issue, or Task
+  until promoted.
 - Spec holds desired system change, rationale, non-goals, acceptance, and
   compatibility impact.
 - Work/Task is a bounded execution slice.
@@ -337,47 +355,38 @@ become a second Issue truth. If implementation evidence contradicts the Pod
 control record, workers write an Implementation Change Request and the control
 lane updates Pod plus repo docs.
 
-## Idea Capture
-
-Use Idea as the buffer between fragmented conversation and committed system
-work.
+## Capture And Candidate Records
 
 Capture is a Secretary/AI skill capability, not a Symphony mode switch and not a
 shell keyword preflight. The active AI decides whether meaningful but
 uncommitted fragments from ordinary chat should be captured, then uses the
 capture skill and Pod tool surface to save them. Symphony consumes captured
-Ideas when it is active. Capture as Ideas when the fragment describes a possible
-system direction, concern, product capability, modeling principle, or
-improvement area. Do not capture ordinary chat, games, or one-off explanations.
+candidate records when it is active. The concrete record type and fields must be
+discovered from policy/model descriptors; this skill must not assume that the
+right type is named `Idea`.
 
-An Idea record should stay small and explicit:
+Capture when the fragment describes a possible system direction, concern,
+product capability, modeling principle, improvement area, rule, or durable
+finding. Do not capture ordinary chat, games, or one-off explanations.
 
-- summary;
-- source messages or source event references;
-- affected area;
-- status: captured, exploring, candidate, promoted, deferred, rejected, or
-  superseded;
-- commitment: thought, direction, tentative_decision, or committed;
-- current understanding;
-- open questions;
-- related records;
-- conflicts;
-- next step.
+A captured candidate should stay small and explicit, using only fields exposed
+by the discovered descriptor. Typical semantics include summary, provenance,
+affected area, lifecycle status, commitment level, current understanding, open
+questions, related records, conflicts, and next step, but the descriptor is the
+authority for concrete field names.
 
 Promotion gates:
 
-- Promote Idea to Requirement Candidate only after the problem, area, value,
-  current understanding, and open questions are explicit.
-- Promote to Spec only after expected behavior, scope, compatibility impact,
-  acceptance, and commitment are explicit.
-- Promote to Work/Task only after implementation boundary, evidence plan, and
+- Promote a candidate to a requirement/spec type only after the problem, area,
+  value, current understanding, and open questions are explicit.
+- Promote to implementation work only after expected behavior, scope,
+  compatibility impact, acceptance, implementation boundary, evidence plan, and
   blocker rules are explicit.
 
-Symphony may decide to use the capture skill and merge Ideas, but it must not
-treat keyword matches or raw chat text as committed product semantics or
-dispatchable work.
-If commitment is unclear, keep it as `thought` or `candidate` and continue
-discussion.
+Symphony may decide to use the capture skill and merge candidate records, but it
+must not treat keyword matches or raw chat text as committed product semantics
+or dispatchable work. If commitment is unclear, keep it as a tentative
+candidate and continue discussion.
 
 ## Sufficiency And Escalation
 
@@ -402,8 +411,8 @@ continue on the current path.
 
 Use the smallest sufficient gate set:
 
-- `binding`: decide whether input is ordinary chat, an Idea, a new Issue, a bug,
-  or a change to existing work.
+- `binding`: decide whether input is ordinary chat, a discovered capture
+  candidate, a new control/work record, a bug, or a change to existing work.
 - `change`: decide whether active scope, acceptance, compatibility, release
   boundary, or base revision has changed enough to rebase, steer, restart,
   cancel, split, or supersede work.
@@ -722,8 +731,9 @@ Delivery -> report
 ```
 
 If a failed attempt exposed an independent product bug or future concern, link
-or promote it through Idea/Issue binding. Otherwise keep it as RunStep/Evidence
-under the current work so the system learns without multiplying issues.
+or promote it through the discovered capture/work binding. Otherwise keep it as
+RunStep/Evidence under the current work so the system learns without multiplying
+issues.
 
 ## Post-Run Reconciliation And Follow-Up Extraction
 
@@ -758,7 +768,8 @@ Classify each follow-up candidate as one of:
 
 - `same_issue_task`: append a Task or remaining-work item to the current Issue;
 - `new_issue`: create a separate Issue and link the source Report/Evidence/Run;
-- `idea`: capture as an Idea because scope, value, or acceptance is not clear;
+- `capture_candidate`: capture through the discovered candidate type because
+  scope, value, or acceptance is not clear;
 - `evidence_only`: keep as a finding/proof without new work;
 - `ask_user`: escalate only when user-owned intent, authority, priority, or
   acceptance is required.

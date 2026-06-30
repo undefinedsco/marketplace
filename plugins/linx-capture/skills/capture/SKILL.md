@@ -64,10 +64,15 @@ material, client secrets, or copied browser session data.
 No-login use is still valid. The AI may still decide what should be captured and
 continue the conversation. If a durable write is required before login, use the
 host's local-first capture/outbox path when available. In LinX, mark the record
-as pending Pod persistence so LinX can replay it after login. In Codex/Claude
-without a local-first host, keep a local note/report and state that it is not
-shared to the Pod yet. Missing login must not make the AI drop a durable
-decision, Idea, preference, or project rule.
+as pending Pod persistence so LinX can replay it after login. In Codex/Claude,
+newer xpod versions can act as the local-first host for modeled object writes:
+after a valid dry-run, `xpod obj upsert ... --commit --json` may return
+`pending_local` and append the mutation to
+`$SOLID_HOME/apps/xpod/outbox/obj-mutations.jsonl` instead of writing to the Pod.
+Report that status honestly as local pending, not Pod saved. If the current xpod
+version cannot create a local pending outbox entry, keep a local note/report and
+state that it is not shared to the Pod yet. Missing login must not make the AI
+drop a durable signal, decision, preference, or project rule.
 
 Before writing, verify the Solid authority when the operation is not purely
 local:
@@ -76,16 +81,27 @@ local:
 xpod auth status --json
 ```
 
-For modeled product resources, inspect the descriptor or existing examples first:
+For modeled product resources, discover the available record types before
+choosing where to write. Concrete types come from policy/model discovery, not
+from prompt memory. Do not assume `Idea` or any other fixed record type.
 
 ```bash
-xpod obj --help
-xpod obj export Idea --json
+xpod obj schemas --json
+xpod obj describe <schema-or-alias> --json
+xpod obj upsert --schema <schema-or-alias> --from - --dry-run --json
 ```
 
-Then write through the modeled object surface. If the current xpod version does
-not expose a suitable modeled command, report the blocker instead of inventing a
-path.
+When using `--from -`, send JSONL: one JSON object per line. Do not pipe pretty multi-line JSON unless xpod explicitly adds non-JSONL stdin support.
+
+Use the dry-run result to show the planned resource URI, subject IRI,
+document/source path, warnings, and validation errors before commit. Commit only
+through the modeled object surface after the plan is valid.
+
+If no discovered record type matches the durable signal, create the host's local
+pending/outbox record when available, or use the discovered `CaptureDraft` or
+`ModelingProposal` fallback descriptors when xpod exposes them. If the current
+xpod version does not expose discovery or a suitable modeled command, report the
+blocker instead of inventing a path.
 
 ## Reporting
 
