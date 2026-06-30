@@ -139,6 +139,11 @@ xpod auth login
 xpod auth status --json
 ```
 
+If `xpod` is unauthenticated but supports local-first object commits, a modeled
+`xpod obj upsert ... --commit --json` may return `pending_local` and write the
+operation to the xpod outbox instead of the Pod. Report `pending_local` as local
+pending state, not as a Pod save.
+
 If `xpod` is unauthenticated or unavailable, continue the Symphony reasoning and
 local record/report work, but state the persistence limitation when a Pod write
 was requested. Do not block ordinary control-lane analysis, task splitting,
