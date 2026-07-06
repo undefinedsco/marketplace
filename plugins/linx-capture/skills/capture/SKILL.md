@@ -35,6 +35,24 @@ capture.
 Use `xpod` as the Pod tool surface. Prefer modeled object commands when
 available. Do not hand-write Turtle for modeled product resources.
 
+## Consent Options
+
+Capture may decide that a durable write is desirable, but the write still needs
+the right authority. When no active CapturePolicy clearly grants the current
+case, prepare a dry-run plan and ask the user with exactly these choices:
+
+- agree: commit this capture once.
+- deny: do not commit it. If a host already made an optimistic or pending write,
+  rollback or mark it rejected.
+- long-term agree: commit this capture and create/update a scoped CapturePolicy
+  so similar future captures can proceed without asking again.
+
+Do not commit a modeled Pod write before the user answers unless an explicit
+policy already covers the same scope, type, risk, and target. If the user denies,
+stop and do not restate the same proposal. If the user chooses long-term agree,
+record the policy scope narrowly: actor, project/chat/thread when known, record
+type, target collection, and allowed confidence/risk boundary.
+
 ## Login And No-Login Behavior
 
 Prefer LinX when the current host is LinX. Use the host application's normal
@@ -102,6 +120,43 @@ pending/outbox record when available, or use the discovered `CaptureDraft` or
 `ModelingProposal` fallback descriptors when xpod exposes them. If the current
 xpod version does not expose discovery or a suitable modeled command, report the
 blocker instead of inventing a path.
+
+## Modeling Questions
+
+Do not invent fields for a missing user-defined type. When discovery shows that
+the user's intended type does not exist or is inactive, ask the user for the
+minimum modeling shape before committing the final semantic record.
+
+Always ask the user for the minimum modeling shape:
+
+- record type name;
+- required fields;
+- optional fields;
+- target collection/folder policy;
+- whether similar records should be captured automatically.
+
+Use ModelingProposal only as a reviewable fallback for the missing model, not as
+the final business record. Examples: Grill Me and Trellis are external products
+for a product watchlist, not as an Idea. Ask for the product/watchlist shape
+before creating product rows; do not guess fields from memory.
+
+## Modeling And Rows Are Separate
+
+Keep schema/model proposals separate from concrete instance rows.
+
+ModelingProposal describes the descriptor only: type name, display label,
+storage/id rules, required fields, optional fields, relations, and folder
+policy. Do not put example rows, seed rows, initialRows, or concrete product instances inside proposedFields.
+
+When the user mentions concrete instances while defining a missing type, create
+separate pending row candidates for those instances. Mark them as row candidate
+records and link them to the ModelingProposal. Do not promote row candidates
+until the descriptor is active.
+
+Example: Trellis and Grill Me may motivate a Watching Product model, but the
+ModelingProposal must contain only the WatchedProduct descriptor. Trellis and
+Grill Me belong in separate pending row candidates until WatchedProduct is an
+active descriptor.
 
 ## Reporting
 
